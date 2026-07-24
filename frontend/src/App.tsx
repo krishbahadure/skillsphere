@@ -9,6 +9,7 @@ import CoursesPage from './pages/app/CoursesPage';
 import ContributionsPage from './pages/app/ContributionsPage';
 import CreditsPage from './pages/app/CreditsPage';
 import ProfilePage from './pages/app/ProfilePage';
+import EditProfilePage from './pages/app/EditProfilePage';
 import SettingsPage from './pages/app/SettingsPage';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -37,6 +38,7 @@ export default function App() {
           <Route path="contributions" element={<ContributionsPage />} />
           <Route path="credits" element={<CreditsPage />} />
           <Route path="profile" element={<ProfilePage />} />
+          <Route path="profile/edit" element={<EditProfilePage />} />
           <Route path="settings" element={<SettingsPage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

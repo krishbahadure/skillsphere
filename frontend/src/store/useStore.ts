@@ -11,6 +11,7 @@ interface AppState {
   // User
   user: UserProfile;
   setUser: (u: Partial<UserProfile>) => void;
+  markNotificationRead: (id: string) => void;
 
   // Courses
   courses: Course[];
@@ -37,13 +38,22 @@ interface AppState {
   toggleSidebar: () => void;
 }
 
-export const useStore = create<AppState>((set, get) => ({
+export const useStore = create<AppState>((set) => ({
   isAuthenticated: false,
   login: () => set({ isAuthenticated: true }),
   logout: () => set({ isAuthenticated: false }),
 
   user: mockUser,
   setUser: (u) => set((s) => ({ user: { ...s.user, ...u } })),
+  markNotificationRead: (id) =>
+    set((s) => ({
+      user: {
+        ...s.user,
+        notifications: s.user.notifications.map((n) =>
+          n.id === id ? { ...n, read: true } : n
+        ),
+      },
+    })),
 
   courses: mockCourses,
   toggleBookmark: (id) =>

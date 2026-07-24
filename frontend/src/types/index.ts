@@ -34,22 +34,71 @@ export interface Contribution {
 export interface Achievement {
   title: string;
   icon: string;
+  description?: string;
+}
+
+export interface Certificate {
+  id: string;
+  title: string;
+  issuer: string;
+  date: string;
+  credentialUrl?: string;
+}
+
+export interface RecentActivity {
+  id: string;
+  type: 'course_published' | 'course_enrolled' | 'contribution_posted' | 'task_completed' | 'credit_earned' | 'badge_unlocked';
+  title: string;
+  description: string;
+  date: string;
+  icon: string;
+}
+
+export interface Notification {
+  id: string;
+  type: 'credit' | 'enrollment' | 'contribution' | 'badge' | 'follow';
+  message: string;
+  time: string;
+  read: boolean;
+  avatarUrl?: string;
 }
 
 export interface UserProfile {
   name: string;
+  username: string;
   avatarUrl: string;
   coverUrl: string;
   college: string;
   department: string;
   year: string;
   skills: string[];
+  interests: string[];
   bio: string;
+  email: string;
+  github?: string;
+  linkedin?: string;
+  portfolio?: string;
+  instagram?: string;
+  location: string;
   coursesCreated: number;
+  coursesEnrolled: number;
   contributionsPosted: number;
+  tasksCompleted: number;
   creditsEarned: number;
   rank: string;
+  level: number;
+  levelTitle: string;
+  isVerifiedCreator: boolean;
+  memberSince: string;
+  followers: number;
+  following: number;
   achievements: Achievement[];
+  certificates: Certificate[];
+  recentActivity: RecentActivity[];
+  notifications: Notification[];
+  learningStreakDays: number;
+  preferredCategories: string[];
+  themePreference: 'light' | 'dark' | 'system';
 }
 
 export interface CreditTransaction {
