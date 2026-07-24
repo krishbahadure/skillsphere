@@ -31,8 +31,8 @@ function HeroUICards() {
     <div className="relative w-full max-w-sm ml-auto">
       {/* Course card */}
       <motion.div
-        animate={{ y: [0, -10, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+        animate={{ y: [0, -12, 0] }}
+        transition={{ duration: 5.5, repeat: Infinity, ease: [0.45, 0, 0.55, 1], repeatType: 'mirror' }}
         className="bg-white rounded-card border border-[#EAEAEA] shadow-card-hover p-4 mb-4 relative z-10"
       >
         <div className="flex items-center gap-3 mb-3">
@@ -55,8 +55,8 @@ function HeroUICards() {
 
       {/* Credit badge */}
       <motion.div
-        animate={{ y: [0, 8, 0] }}
-        transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+        animate={{ y: [0, 10, 0] }}
+        transition={{ duration: 6, repeat: Infinity, ease: [0.45, 0, 0.55, 1], repeatType: 'mirror', delay: 0.8 }}
         className="absolute -left-8 top-8 bg-white rounded-card border border-[#EAEAEA] shadow-card px-4 py-3 z-20"
       >
         <div className="flex items-center gap-2">
@@ -72,8 +72,8 @@ function HeroUICards() {
 
       {/* Avatar cluster */}
       <motion.div
-        animate={{ y: [0, -6, 0] }}
-        transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+        animate={{ y: [0, -8, 0] }}
+        transition={{ duration: 7, repeat: Infinity, ease: [0.45, 0, 0.55, 1], repeatType: 'mirror', delay: 1.6 }}
         className="bg-white rounded-card border border-[#EAEAEA] shadow-card p-3 flex items-center gap-2"
       >
         <div className="flex -space-x-2">

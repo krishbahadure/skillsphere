@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Star, Clock, Users, Bookmark } from 'lucide-react';
+import { Star, Clock, Users, Bookmark, Maximize2 } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import type { Course } from '../../types';
 
@@ -12,9 +12,10 @@ const difficultyColors: Record<string, string> = {
 interface CourseCardProps {
   course: Course;
   index?: number;
+  onExpand?: (course: Course) => void;
 }
 
-export function CourseCard({ course, index = 0 }: CourseCardProps) {
+export function CourseCard({ course, index = 0, onExpand }: CourseCardProps) {
   const toggleBookmark = useStore((s) => s.toggleBookmark);
 
   const formatDuration = (mins: number) => {
@@ -29,6 +30,7 @@ export function CourseCard({ course, index = 0 }: CourseCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: index * 0.05, ease: 'easeOut' }}
       whileHover={{ y: -4 }}
+      onClick={() => onExpand?.(course)}
       className="card group overflow-hidden cursor-pointer"
     >
       {/* Thumbnail */}
@@ -66,6 +68,21 @@ export function CourseCard({ course, index = 0 }: CourseCardProps) {
             {course.difficulty}
           </span>
         </div>
+        {/* Expand icon — subtle, bottom-right corner */}
+        <motion.button
+          whileTap={{ scale: 0.88 }}
+          onClick={(e) => {
+            e.stopPropagation();
+            onExpand?.(course);
+          }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileHover={{ scale: 1.05 }}
+          className="absolute bottom-3 right-3 p-1.5 rounded-full bg-white/90 backdrop-blur-sm opacity-0 group-hover:opacity-100 hover:bg-white transition-all duration-150 cursor-pointer shadow-sm"
+          aria-label="View course details"
+          title="View details"
+        >
+          <Maximize2 size={12} className="text-[#0A0A0A]" />
+        </motion.button>
       </div>
 
       {/* Card body */}

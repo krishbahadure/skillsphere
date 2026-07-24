@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { SlidersHorizontal, Bookmark, X, Search } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { CourseCard } from '../../components/ui/CourseCard';
+import { CourseDetailModal } from '../../components/ui/CourseDetailModal';
 import { GridSkeleton } from '../../components/ui/Skeleton';
 import { PageTransition } from '../../components/ui/PageTransition';
 import { CATEGORIES, DIFFICULTIES } from '../../data/mockData';
+import type { Course } from '../../types';
 
 const BATCH_SIZE = 8;
 
@@ -33,6 +35,7 @@ export default function CoursesPage() {
   const [bookmarkedOnly, setBookmarkedOnly] = useState(false);
   const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 900);
@@ -147,11 +150,18 @@ export default function CoursesPage() {
         <EmptyState message={isFiltered || searchQuery ? 'Try adjusting your filters or search query.' : 'No courses available yet.'} />
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {visible.map((course, i) => (
-              <CourseCard key={course.id} course={course} index={i} />
-            ))}
-          </div>
+          <LayoutGroup>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {visible.map((course, i) => (
+                <CourseCard
+                  key={course.id}
+                  course={course}
+                  index={i}
+                  onExpand={setSelectedCourse}
+                />
+              ))}
+            </div>
+          </LayoutGroup>
 
           {/* Load more */}
           {hasMore && (
@@ -167,6 +177,12 @@ export default function CoursesPage() {
           )}
         </>
       )}
+
+      {/* Course Detail Modal — rendered via portal */}
+      <CourseDetailModal
+        course={selectedCourse}
+        onClose={() => setSelectedCourse(null)}
+      />
     </div>
     </PageTransition>
   );

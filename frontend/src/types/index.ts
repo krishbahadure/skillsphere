@@ -5,6 +5,20 @@ export interface Instructor {
   avatarUrl: string;
 }
 
+export interface CourseReview {
+  id: string;
+  author: string;
+  avatarUrl: string;
+  rating: number;
+  comment: string;
+  date: string;
+}
+
+export interface CourseModule {
+  title: string;
+  lessons: string[];
+}
+
 export interface Course {
   id: string;
   title: string;
@@ -17,7 +31,16 @@ export interface Course {
   creditCost: number;
   rating: number;
   bookmarked: boolean;
+  // Optional rich detail fields (populated for course detail modal)
+  description?: string;
+  tags?: string[];
+  prerequisites?: string[];
+  skillsLearned?: string[];
+  curriculum?: CourseModule[];
+  instructorBio?: string;
+  reviews?: CourseReview[];
 }
+
 
 export interface Contribution {
   id: string;

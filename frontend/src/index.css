@@ -15,6 +15,7 @@
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 80px; /* offset for fixed header */
   }
 
   body {
@@ -23,7 +24,19 @@
     color: #0A0A0A;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch; /* momentum scroll on iOS */
   }
+
+  /* Smooth GPU-composited scrolling for all overflow containers */
+  [data-smooth-scroll],
+  .overflow-y-auto,
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    will-change: transform;
+  }
+
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Clash Display', 'General Sans', 'Inter', sans-serif;

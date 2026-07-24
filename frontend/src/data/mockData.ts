@@ -13,6 +13,22 @@ export const mockCourses: Course[] = [
     creditCost: 15,
     rating: 4.9,
     bookmarked: true,
+    description: 'Go from zero to hero in Figma. This comprehensive masterclass covers everything from your first wireframe sketch to pixel-perfect, developer-ready UI components. You will learn component architecture, design systems, auto-layout, prototyping flows, and how to hand off designs to developers with precision. Real-world project-based learning throughout.',
+    tags: ['Figma', 'UI Design', 'Design Systems', 'Prototyping'],
+    prerequisites: ['Basic computer literacy', 'No prior design experience needed', 'A curiosity for visual thinking'],
+    skillsLearned: ['Figma fundamentals & shortcuts', 'Auto-layout & responsive frames', 'Component & variant systems', 'Design tokens', 'Prototyping & interactions', 'Developer handoff'],
+    curriculum: [
+      { title: 'Module 1: Figma Foundations', lessons: ['Interface tour & keyboard shortcuts', 'Frames, groups & layers', 'Typography & colour styles'] },
+      { title: 'Module 2: Auto-Layout Mastery', lessons: ['Auto-layout basics', 'Nested auto-layout', 'Responsive components'] },
+      { title: 'Module 3: Component Systems', lessons: ['Variants & properties', 'Boolean properties', 'Building a design system'] },
+      { title: 'Module 4: Prototyping & Handoff', lessons: ['Interactive prototypes', 'Smart animate', 'Dev Mode & CSS export'] },
+    ],
+    instructorBio: 'Priya Nair is a Senior Product Designer at a Series B startup, with 5+ years shipping consumer-facing products. She has taught 4,000+ students across SkillSphere and runs workshops at IIT Bombay.',
+    reviews: [
+      { id: 'r1', author: 'Aditya K.', avatarUrl: 'https://i.pravatar.cc/32?img=11', rating: 5, comment: 'Best Figma course I have taken. Priya explains auto-layout in a way that finally made it click for me. Worth every credit!', date: '2025-05-12' },
+      { id: 'r2', author: 'Sara M.', avatarUrl: 'https://i.pravatar.cc/32?img=12', rating: 5, comment: 'The component system module alone changed how I design forever. Incredibly practical and dense with value.', date: '2025-04-28' },
+      { id: 'r3', author: 'Rohan T.', avatarUrl: 'https://i.pravatar.cc/32?img=13', rating: 4, comment: 'Great course. A few sections felt a bit rushed but overall an excellent foundation for anyone serious about Figma.', date: '2025-04-10' },
+    ],
   },
   {
     id: 'c2',
@@ -26,6 +42,21 @@ export const mockCourses: Course[] = [
     creditCost: 25,
     rating: 4.8,
     bookmarked: false,
+    description: 'A battle-tested curriculum that takes you from React fundamentals to building and deploying a complete full-stack application with Node.js, Express, and PostgreSQL. You will cover state management with Zustand, REST and GraphQL APIs, authentication with JWTs, and CI/CD deployment on Railway.',
+    tags: ['React', 'Node.js', 'TypeScript', 'PostgreSQL', 'Full-Stack'],
+    prerequisites: ['HTML, CSS & JavaScript fundamentals', 'Basic understanding of how the web works', 'Comfort with the command line'],
+    skillsLearned: ['React 18 hooks & patterns', 'REST API design with Express', 'PostgreSQL & Prisma ORM', 'JWT authentication', 'State management (Zustand)', 'Docker basics & Railway deploy'],
+    curriculum: [
+      { title: 'Module 1: React Foundations', lessons: ['JSX & component model', 'useState & useEffect', 'React Router v6', 'Data fetching patterns'] },
+      { title: 'Module 2: Node.js & Express', lessons: ['Building a REST API', 'Middleware & error handling', 'File upload with Multer'] },
+      { title: 'Module 3: Database Layer', lessons: ['PostgreSQL setup', 'Prisma schema & migrations', 'Relational data modelling'] },
+      { title: 'Module 4: Auth & Deploy', lessons: ['JWT & refresh tokens', 'Protected routes', 'Docker Compose', 'Deploy to Railway'] },
+    ],
+    instructorBio: 'Arjun Sharma is a full-stack engineer with experience at two YC-backed startups. He is a core contributor to a popular React component library and mentors 200+ students on SkillSphere.',
+    reviews: [
+      { id: 'r1', author: 'Meera J.', avatarUrl: 'https://i.pravatar.cc/32?img=14', rating: 5, comment: 'The most complete full-stack course I have found. Arjun does not skip the hard parts — authentication and deployment are covered brilliantly.', date: '2025-06-01' },
+      { id: 'r2', author: 'Ishaan P.', avatarUrl: 'https://i.pravatar.cc/32?img=15', rating: 5, comment: 'Went from knowing basic React to deploying my own SaaS in 3 weeks. Phenomenal course density.', date: '2025-05-20' },
+    ],
   },
   {
     id: 'c3',
@@ -39,6 +70,20 @@ export const mockCourses: Course[] = [
     creditCost: 20,
     rating: 4.7,
     bookmarked: false,
+    description: 'A hands-on data science journey covering the entire analytics pipeline — from raw data ingestion to predictive modelling and model evaluation. Uses real-world datasets throughout (IPL, e-commerce, climate data) so every lesson has practical context.',
+    tags: ['Python', 'Pandas', 'NumPy', 'Scikit-learn', 'Data Viz'],
+    prerequisites: ['Python basics (variables, loops, functions)', 'High school level mathematics', 'No prior data science experience needed'],
+    skillsLearned: ['Data wrangling with Pandas', 'Numerical computing with NumPy', 'Data visualisation (Matplotlib, Seaborn)', 'Machine learning with Scikit-learn', 'Model evaluation & cross-validation', 'Jupyter notebooks workflow'],
+    curriculum: [
+      { title: 'Module 1: Python for Data', lessons: ['Pandas Series & DataFrames', 'Data cleaning & missing values', 'Merging & groupby operations'] },
+      { title: 'Module 2: Visualisation', lessons: ['Matplotlib fundamentals', 'Seaborn statistical plots', 'Interactive charts with Plotly'] },
+      { title: 'Module 3: Machine Learning', lessons: ['Linear & logistic regression', 'Decision trees & random forests', 'Model evaluation metrics'] },
+    ],
+    instructorBio: 'Rhea Desai is a data scientist at a leading fintech company, previously a research assistant at IIT Delhi. She has published 2 papers on NLP and creates practical, jargon-free content for aspiring data scientists.',
+    reviews: [
+      { id: 'r1', author: 'Dev R.', avatarUrl: 'https://i.pravatar.cc/32?img=16', rating: 5, comment: 'Rhea explains Pandas groupby in a way I have never seen before. This course paid for itself in the first module.', date: '2025-04-15' },
+      { id: 'r2', author: 'Ananya S.', avatarUrl: 'https://i.pravatar.cc/32?img=17', rating: 4, comment: 'Very solid foundations. I wish the deep learning section was included but the core curriculum is excellent.', date: '2025-03-30' },
+    ],
   },
   {
     id: 'c4',
@@ -52,6 +97,20 @@ export const mockCourses: Course[] = [
     creditCost: 10,
     rating: 4.5,
     bookmarked: true,
+    description: 'Master the digital marketing toolkit from scratch. This beginner-friendly course covers SEO fundamentals, Google Ads, Meta advertising, content strategy, email marketing, and growth hacking experiments. Perfect for students looking to add marketing skills to their resume or grow a side project.',
+    tags: ['SEO', 'Google Ads', 'Meta Ads', 'Content Marketing', 'Growth'],
+    prerequisites: ['Basic internet literacy', 'No marketing experience required', 'A project or idea to practice on is helpful'],
+    skillsLearned: ['SEO on-page & off-page optimisation', 'Google Ads campaign setup', 'Meta Ads manager', 'Content calendar creation', 'Email marketing (Mailchimp)', 'A/B testing & analytics'],
+    curriculum: [
+      { title: 'Module 1: SEO Fundamentals', lessons: ['Keyword research', 'On-page optimisation', 'Link building basics', 'Google Search Console'] },
+      { title: 'Module 2: Paid Advertising', lessons: ['Google Ads setup', 'Bidding strategies', 'Meta Ads campaigns', 'Retargeting audiences'] },
+      { title: 'Module 3: Growth & Analytics', lessons: ['Growth hacking mindset', 'A/B testing framework', 'Google Analytics 4 setup'] },
+    ],
+    instructorBio: 'Karan Mehta is a performance marketing consultant who has managed ₹2Cr+ in ad spend across e-commerce and SaaS clients. He runs a popular marketing newsletter with 8,000+ subscribers.',
+    reviews: [
+      { id: 'r1', author: 'Pooja G.', avatarUrl: 'https://i.pravatar.cc/32?img=18', rating: 5, comment: 'Got my first freelance SEO client a week after finishing this course. Practical, actionable, and no fluff.', date: '2025-05-05' },
+      { id: 'r2', author: 'Aryan V.', avatarUrl: 'https://i.pravatar.cc/32?img=19', rating: 4, comment: 'Great intro to digital marketing. The Meta Ads module is especially well done.', date: '2025-04-22' },
+    ],
   },
   {
     id: 'c5',
@@ -65,6 +124,18 @@ export const mockCourses: Course[] = [
     creditCost: 8,
     rating: 4.6,
     bookmarked: false,
+    description: 'Financial literacy tailored for the Indian college student. Learn how to budget on a stipend, understand tax basics, start a SIP, pick your first mutual fund, and build habits that compound over a decade. No finance background needed — just the willingness to start.',
+    tags: ['Personal Finance', 'Investing', 'SIP', 'Mutual Funds', 'Budgeting'],
+    prerequisites: ['No prerequisites — if you earn or spend money, this course is for you'],
+    skillsLearned: ['50/30/20 budgeting rule', 'Understanding compounding interest', 'Starting a SIP from ₹500', 'Mutual fund selection criteria', 'Tax-saving instruments (ELSS, NPS)', 'Emergency fund building'],
+    curriculum: [
+      { title: 'Module 1: Budgeting', lessons: ['Tracking expenses', '50/30/20 rule', 'Emergency fund setup'] },
+      { title: 'Module 2: Investing', lessons: ['Stocks vs mutual funds', 'SIP basics', 'Index fund philosophy', 'ELSS & tax saving'] },
+    ],
+    instructorBio: 'Nisha Patel is a SEBI-registered investment advisor and personal finance blogger with 50,000+ readers. She believes financial education should start in college, not after.',
+    reviews: [
+      { id: 'r1', author: 'Rahul B.', avatarUrl: 'https://i.pravatar.cc/32?img=20', rating: 5, comment: 'Started my first SIP the day I finished this course. This is the course every college student needs.', date: '2025-03-14' },
+    ],
   },
   {
     id: 'c6',
@@ -78,7 +149,22 @@ export const mockCourses: Course[] = [
     creditCost: 12,
     rating: 4.8,
     bookmarked: false,
+    description: 'Build a solid N5-level Japanese foundation from scratch. Learn Hiragana, Katakana, and essential Kanji alongside practical conversation skills for everyday situations — shopping, introductions, directions, and more. Taught with immersive examples and memory techniques that actually work.',
+    tags: ['Japanese', 'N5', 'Hiragana', 'Katakana', 'JLPT'],
+    prerequisites: ['No prior Japanese knowledge needed', 'Commitment to practice 20 mins/day recommended'],
+    skillsLearned: ['Complete Hiragana & Katakana', 'Essential N5 vocabulary (800+ words)', 'Basic sentence structure (は, が, を)', 'Numbers, time & dates', 'Polite conversation patterns', 'Introduction to Kanji (100 characters)'],
+    curriculum: [
+      { title: 'Module 1: Writing Systems', lessons: ['Hiragana (あ-ん)', 'Katakana (ア-ン)', 'First 50 Kanji'] },
+      { title: 'Module 2: Core Grammar', lessons: ['は and が particles', 'Verb conjugation basics', 'て-form & て-ください'] },
+      { title: 'Module 3: Conversations', lessons: ['Self introductions', 'Shopping dialogues', 'Asking for directions'] },
+    ],
+    instructorBio: 'Yuki Tanaka is a native Japanese speaker and certified JLPT prep coach based in Tokyo. She has helped 1,000+ international students pass N5 and N4 with her memory-based teaching methodology.',
+    reviews: [
+      { id: 'r1', author: 'Priya K.', avatarUrl: 'https://i.pravatar.cc/32?img=21', rating: 5, comment: "Yuki's mnemonics for Hiragana are genius. I memorised the entire chart in 3 days. Highly recommended!", date: '2025-06-10' },
+      { id: 'r2', author: 'Sid N.', avatarUrl: 'https://i.pravatar.cc/32?img=22', rating: 5, comment: 'The conversation modules feel like real dialogues, not textbook Japanese. So much fun to learn this way.', date: '2025-05-25' },
+    ],
   },
+
   {
     id: 'c7',
     title: 'Machine Learning Engineering: Build & Deploy Models',
