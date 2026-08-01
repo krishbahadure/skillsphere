@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Star, Clock, Users, Bookmark, Maximize2 } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import type { Course } from '../../types';
+// import { useNavigate } from "react-router-dom";
 
 const difficultyColors: Record<string, string> = {
   Beginner: 'bg-[#22C55E]/10 text-[#22C55E]',
@@ -23,6 +24,8 @@ export function CourseCard({ course, index = 0, onExpand }: CourseCardProps) {
     const m = mins % 60;
     return h > 0 ? `${h}h ${m > 0 ? `${m}m` : ''}` : `${m}m`;
   };
+
+// const navigate = useNavigate();
 
   return (
     <motion.div

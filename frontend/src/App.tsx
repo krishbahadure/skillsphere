@@ -11,6 +11,7 @@ import CreditsPage from './pages/app/CreditsPage';
 import ProfilePage from './pages/app/ProfilePage';
 import EditProfilePage from './pages/app/EditProfilePage';
 import SettingsPage from './pages/app/SettingsPage';
+import CoursePlayerPage from "./pages/app/CoursePlayerPage";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useStore((s) => s.isAuthenticated);
@@ -35,6 +36,7 @@ export default function App() {
         >
           <Route index element={<Navigate to="courses" replace />} />
           <Route path="courses" element={<CoursesPage />} />
+          <Route path="course/:id" element={<CoursePlayerPage />} />
           <Route path="contributions" element={<ContributionsPage />} />
           <Route path="credits" element={<CreditsPage />} />
           <Route path="profile" element={<ProfilePage />} />

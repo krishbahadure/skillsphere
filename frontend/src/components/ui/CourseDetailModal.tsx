@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import type { Course } from '../../types';
+import { useNavigate } from "react-router-dom";
 
 /* ─────────────────── helpers ─────────────────── */
 
@@ -122,9 +123,16 @@ export function CourseDetailModal({ course, onClose }: Props) {
     scrollRef.current?.scrollTo({ top: 0 });
   }, [course?.id]);
 
+  const navigate = useNavigate();
+
   const handleConfirmEnrol = () => {
-    setShowConfirm(false);
-    setEnrolled(true);
+      setShowConfirm(false);
+      setEnrolled(true);
+
+      setTimeout(() => {
+          onClose();
+          navigate(`/app/course/${course!.id}`);
+      }, 800);
   };
 
   if (!course) return null;
