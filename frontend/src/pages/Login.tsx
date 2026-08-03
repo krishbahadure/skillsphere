@@ -1,19 +1,89 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Eye, EyeOff, Mail, Lock, Loader2 } from 'lucide-react';
 import { useStore } from '../store/useStore';
 
+/* ── helpers ─────────────────────────────────────── */
+const isValidEmail = (v: string) =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+
+interface FieldState {
+  value: string;
+  touched: boolean;
+  error: string;
+}
+
+const init = (): FieldState => ({ value: '', touched: false, error: '' });
+
+/* ── component ───────────────────────────────────── */
 export default function Login() {
   const navigate = useNavigate();
   const login = useStore((s) => s.login);
-  const [showPass, setShowPass] = useState(false);
-  const [form, setForm] = useState({ email: '', password: '' });
+  const isProfileComplete = useStore((s) => s.isProfileComplete);
 
+  const postLoginDest = () => isProfileComplete ? '/app/courses' : '/profile-setup';
+
+  const [showPass, setShowPass] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [email, setEmail] = useState<FieldState>(init());
+  const [password, setPassword] = useState<FieldState>(init());
+
+  /* ── validation ──────────────────────────────────── */
+  const validateEmail = useCallback((val: string): string => {
+    const v = val.trim();
+    if (!v) return 'Email is required.';
+    if (!isValidEmail(v)) return 'Enter a valid email address.';
+    return '';
+  }, []);
+
+  const validatePassword = useCallback((val: string): string => {
+    const v = val.trim();
+    if (!v) return 'Password is required.';
+    return '';
+  }, []);
+
+  const isFormValid =
+    !validateEmail(email.value) && !validatePassword(password.value);
+
+  /* ── change handlers ─────────────────────────────── */
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setEmail({ value: val, touched: true, error: validateEmail(val) });
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setPassword({ value: val, touched: true, error: validatePassword(val) });
+  };
+
+  /* ── submit ──────────────────────────────────────── */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    login();
-    navigate('/app/courses');
+
+    // Touch both fields to surface errors
+    const emailErr = validateEmail(email.value);
+    const passErr = validatePassword(password.value);
+    setEmail(p => ({ ...p, touched: true, error: emailErr }));
+    setPassword(p => ({ ...p, touched: true, error: passErr }));
+
+    if (emailErr || passErr) return;
+
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      login();
+      navigate(postLoginDest());
+    }, 1200);
+  };
+
+  /* ── field border helper ─────────────────────────── */
+  const fieldClass = (field: FieldState, extra = '') => {
+    const base = `input-field transition-all duration-200 ${extra}`;
+    if (!field.touched || !field.value.trim()) return base;
+    if (field.error) return `${base} !border-red-400 !ring-red-200 !ring-2`;
+    return `${base} !border-green-400 !ring-green-100 !ring-2`;
   };
 
   return (
@@ -44,7 +114,7 @@ export default function Login() {
           <motion.button
             whileTap={{ scale: 0.97 }}
             type="button"
-            onClick={() => { login(); navigate('/app/courses'); }}
+            onClick={() => { login(); navigate(postLoginDest()); }}
             className="w-full flex items-center justify-center gap-2 bg-[#C6FF3D] text-[#0B0B0B] font-semibold py-3 rounded-btn hover:bg-[#B8F020] transition-all duration-150 cursor-pointer mb-3"
           >
             <span className="text-sm">⚡ Try Demo — One Click</span>
@@ -71,7 +141,8 @@ export default function Login() {
             <div className="flex-1 border-t border-[#EAEAEA]" />
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+            {/* Email */}
             <div>
               <label className="block text-xs font-medium text-[#0A0A0A] mb-1.5" htmlFor="login-email">Email</label>
               <div className="relative">
@@ -79,14 +150,33 @@ export default function Login() {
                 <input
                   id="login-email"
                   type="email"
-                  required
-                  className="input-field pl-10"
+                  className={fieldClass(email, 'pl-10')}
                   placeholder="you@college.edu"
-                  value={form.email}
-                  onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
+                  value={email.value}
+                  onChange={handleEmailChange}
+                  onBlur={() => setEmail(p => ({ ...p, touched: true, error: validateEmail(p.value) }))}
+                  aria-invalid={email.touched && !!email.error}
+                  aria-describedby="login-email-error"
                 />
               </div>
+              <AnimatePresence>
+                {email.touched && email.error && (
+                  <motion.p
+                    id="login-email-error"
+                    role="alert"
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={{ duration: 0.18 }}
+                    className="text-2xs text-red-500 mt-1 font-medium"
+                  >
+                    {email.error}
+                  </motion.p>
+                )}
+              </AnimatePresence>
             </div>
+
+            {/* Password */}
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <label className="text-xs font-medium text-[#0A0A0A]" htmlFor="login-password">Password</label>
@@ -97,11 +187,13 @@ export default function Login() {
                 <input
                   id="login-password"
                   type={showPass ? 'text' : 'password'}
-                  required
-                  className="input-field pl-10 pr-10"
+                  className={fieldClass(password, 'pl-10 pr-10')}
                   placeholder="••••••••"
-                  value={form.password}
-                  onChange={e => setForm(p => ({ ...p, password: e.target.value }))}
+                  value={password.value}
+                  onChange={handlePasswordChange}
+                  onBlur={() => setPassword(p => ({ ...p, touched: true, error: validatePassword(p.value) }))}
+                  aria-invalid={password.touched && !!password.error}
+                  aria-describedby="login-password-error"
                 />
                 <button
                   type="button"
@@ -112,13 +204,40 @@ export default function Login() {
                   {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>
               </div>
+              <AnimatePresence>
+                {password.touched && password.error && (
+                  <motion.p
+                    id="login-password-error"
+                    role="alert"
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={{ duration: 0.18 }}
+                    className="text-2xs text-red-500 mt-1 font-medium"
+                  >
+                    {password.error}
+                  </motion.p>
+                )}
+              </AnimatePresence>
             </div>
+
+            {/* Submit */}
             <motion.button
-              whileTap={{ scale: 0.97 }}
+              whileTap={isFormValid && !isLoading ? { scale: 0.97 } : {}}
               type="submit"
-              className="btn-primary w-full justify-center mt-2"
+              disabled={!isFormValid || isLoading}
+              className={`btn-primary w-full justify-center mt-2 transition-opacity duration-200 ${
+                !isFormValid || isLoading ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
             >
-              Sign In
+              {isLoading ? (
+                <>
+                  <Loader2 size={15} className="animate-spin" />
+                  Signing in…
+                </>
+              ) : (
+                'Sign In'
+              )}
             </motion.button>
           </form>
 

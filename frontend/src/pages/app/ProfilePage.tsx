@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import {
   MapPin, GraduationCap, Link as LinkIcon, Github, Linkedin,
   Users, BookOpen, Coins, Award, CheckCircle, Edit2,
-  Flame, Shield, Star, ExternalLink
+  Flame, Shield, Star, ExternalLink, Briefcase
 } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 
@@ -131,11 +131,17 @@ export default function ProfilePage() {
                 <GraduationCap size={13} /> {user.college} · {user.department} · {user.year}
               </div>
               <div className="flex items-center gap-2 text-xs text-[#6B6B6B]">
-                <MapPin size={13} /> {user.location}
+                <MapPin size={13} /> {user.city ? `${user.city}, ${user.country}` : user.location}
               </div>
               <div className="flex items-center gap-2 text-xs text-[#6B6B6B]">
                 <Users size={13} /> {user.followers} followers · {user.following} following
               </div>
+              {user.role && (
+                <div className="flex items-center gap-2 text-xs">
+                  {user.role === 'Company & Freelancer' ? <Briefcase size={13} className="text-[#6B6B6B]" /> : <GraduationCap size={13} className="text-[#6B6B6B]" />}
+                  <span className="px-2 py-0.5 rounded-full bg-[#C6FF3D]/30 text-[#0A0A0A] font-semibold text-xs">{user.role}</span>
+                </div>
+              )}
             </div>
           </div>
 

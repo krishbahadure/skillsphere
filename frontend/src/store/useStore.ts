@@ -2,11 +2,45 @@ import { create } from 'zustand';
 import type { Course, Contribution, UserProfile, CreditTransaction } from '../types';
 import { mockCourses, mockContributions, mockUser, mockCreditTransactions } from '../data/mockData';
 
+/* ── localStorage helpers ─────────────────────────── */
+const LS_PROFILE_KEY = 'ss_user_profile';
+const LS_COMPLETE_KEY = 'ss_profile_complete';
+
+function loadPersistedUser(): UserProfile {
+  try {
+    const raw = localStorage.getItem(LS_PROFILE_KEY);
+    if (raw) return { ...mockUser, ...JSON.parse(raw) };
+  } catch { /* ignore */ }
+  return mockUser;
+}
+
+function loadPersistedComplete(): boolean {
+  try {
+    return localStorage.getItem(LS_COMPLETE_KEY) === 'true';
+  } catch { return false; }
+}
+
+function persistUser(u: UserProfile) {
+  try { localStorage.setItem(LS_PROFILE_KEY, JSON.stringify(u)); } catch { /* ignore */ }
+}
+
+function persistComplete(v: boolean) {
+  try { localStorage.setItem(LS_COMPLETE_KEY, String(v)); } catch { /* ignore */ }
+}
+
+/* ── initial values (rehydrated from localStorage) ── */
+const initialUser = loadPersistedUser();
+const initialComplete = loadPersistedComplete();
+
 interface AppState {
   // Auth
   isAuthenticated: boolean;
   login: () => void;
   logout: () => void;
+
+  // Profile completion gate
+  isProfileComplete: boolean;
+  completeProfile: (data: Partial<UserProfile>) => void;
 
   // User
   user: UserProfile;
@@ -43,17 +77,33 @@ export const useStore = create<AppState>((set) => ({
   login: () => set({ isAuthenticated: true }),
   logout: () => set({ isAuthenticated: false }),
 
-  user: mockUser,
-  setUser: (u) => set((s) => ({ user: { ...s.user, ...u } })),
+  isProfileComplete: initialComplete,
+  completeProfile: (data) =>
+    set((s) => {
+      const updated: UserProfile = { ...s.user, ...data, isProfileComplete: true };
+      persistUser(updated);
+      persistComplete(true);
+      return { user: updated, isProfileComplete: true };
+    }),
+
+  user: initialUser,
+  setUser: (u) =>
+    set((s) => {
+      const updated = { ...s.user, ...u };
+      persistUser(updated);
+      return { user: updated };
+    }),
   markNotificationRead: (id) =>
-    set((s) => ({
-      user: {
+    set((s) => {
+      const updated = {
         ...s.user,
         notifications: s.user.notifications.map((n) =>
           n.id === id ? { ...n, read: true } : n
         ),
-      },
-    })),
+      };
+      persistUser(updated);
+      return { user: updated };
+    }),
 
   courses: mockCourses,
   toggleBookmark: (id) =>
@@ -72,7 +122,9 @@ export const useStore = create<AppState>((set) => ({
   applyToContribution: (id) =>
     set((s) => ({
       contributions: s.contributions.map((c) =>
-        c.id === id ? { ...c, applied: !c.applied, applicantsCount: c.applied ? c.applicantsCount - 1 : c.applicantsCount + 1 } : c
+        c.id === id
+          ? { ...c, applied: !c.applied, applicantsCount: c.applied ? c.applicantsCount - 1 : c.applicantsCount + 1 }
+          : c
       ),
     })),
   addContribution: (c) =>

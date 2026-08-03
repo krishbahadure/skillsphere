@@ -86,6 +86,8 @@ export interface Notification {
   avatarUrl?: string;
 }
 
+export type UserRole = 'Student' | 'Company & Freelancer';
+
 export interface UserProfile {
   name: string;
   username: string;
@@ -94,6 +96,9 @@ export interface UserProfile {
   college: string;
   department: string;
   year: string;
+  city: string;
+  country: string;
+  role: UserRole;
   skills: string[];
   interests: string[];
   bio: string;
@@ -112,6 +117,7 @@ export interface UserProfile {
   level: number;
   levelTitle: string;
   isVerifiedCreator: boolean;
+  isProfileComplete: boolean;
   memberSince: string;
   followers: number;
   following: number;
@@ -121,7 +127,6 @@ export interface UserProfile {
   notifications: Notification[];
   learningStreakDays: number;
   preferredCategories: string[];
-  themePreference: 'light' | 'dark' | 'system';
 }
 
 export interface CreditTransaction {

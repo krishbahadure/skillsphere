@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   User, Settings, LogOut, ChevronRight, BookOpen, Users,
   Coins, Award, Flame, Bell, CheckCircle, Star, ExternalLink,
-  GraduationCap, MapPin, Calendar, Shield
+  GraduationCap, MapPin, Calendar, Shield, Briefcase
 } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 
@@ -111,11 +111,17 @@ export default function ProfileDropdown({ open, onClose }: Props) {
                   <GraduationCap size={10} /> {user.college}
                 </span>
                 <span className="flex items-center gap-1 text-[10px] text-[#6B6B6B]">
-                  <MapPin size={10} /> {user.location}
+                  <MapPin size={10} /> {user.city ? `${user.city}, ${user.country}` : user.location}
                 </span>
                 <span className="flex items-center gap-1 text-[10px] text-[#6B6B6B]">
                   <Calendar size={10} /> Since {new Date(user.memberSince).getFullYear()}
                 </span>
+                {user.role && (
+                  <span className="flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-[#C6FF3D]/30 text-[#0A0A0A]">
+                    {user.role === 'Company & Freelancer' ? <Briefcase size={9} /> : <GraduationCap size={9} />}
+                    {user.role}
+                  </span>
+                )}
               </div>
 
               {/* Level progress */}

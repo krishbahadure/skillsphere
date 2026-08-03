@@ -1,12 +1,18 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Check, Camera, Github, Linkedin, Globe, Instagram, MapPin, ChevronRight } from 'lucide-react';
+import { X, Check, Camera, Github, Linkedin, Globe, Instagram, MapPin, ChevronRight, GraduationCap, Briefcase } from 'lucide-react';
 import { useStore } from '../../store/useStore';
+import type { UserRole } from '../../types';
 
 const YEARS = ['1st Year', '2nd Year', '3rd Year', '4th Year', 'Postgraduate', 'PhD'];
 const CATEGORIES = ['Design', 'Web Dev', 'Data Science', 'Marketing', 'Finance', 'Languages', 'AI/ML', 'Business'];
 const PRIVACY_OPTIONS = ['Public', 'Friends Only', 'Private'];
+const ROLES: UserRole[] = ['Student', 'Company & Freelancer'];
+const COUNTRIES = [
+  'India', 'United States', 'United Kingdom', 'Canada', 'Australia',
+  'Germany', 'Singapore', 'UAE', 'France', 'Japan', 'Brazil', 'Other',
+];
 
 function Label({ htmlFor, children }: { htmlFor: string; children: React.ReactNode }) {
   return <label htmlFor={htmlFor} className="block text-xs font-semibold text-[#0A0A0A] mb-1.5">{children}</label>;
@@ -123,6 +129,9 @@ export default function EditProfilePage() {
     college: user.college,
     department: user.department,
     year: user.year,
+    city: user.city ?? '',
+    country: user.country ?? '',
+    role: (user.role ?? 'Student') as UserRole,
     location: user.location,
     email: user.email,
     github: user.github ?? '',
@@ -132,7 +141,6 @@ export default function EditProfilePage() {
     skills: [...user.skills],
     interests: [...user.interests],
     preferredCategories: [...user.preferredCategories],
-    themePreference: user.themePreference,
     privacyProfile: 'Public' as string,
     privacyContributions: 'Public' as string,
     notifCredits: true,
@@ -159,7 +167,10 @@ export default function EditProfilePage() {
       college: form.college,
       department: form.department,
       year: form.year,
-      location: form.location,
+      city: form.city,
+      country: form.country,
+      role: form.role,
+      location: form.city && form.country ? `${form.city}, ${form.country}` : form.location,
       email: form.email,
       github: form.github || undefined,
       linkedin: form.linkedin || undefined,
@@ -168,7 +179,6 @@ export default function EditProfilePage() {
       skills: form.skills,
       interests: form.interests,
       preferredCategories: form.preferredCategories,
-      themePreference: form.themePreference as 'light' | 'dark' | 'system',
     });
     setSaved(true);
   };
@@ -236,11 +246,18 @@ export default function EditProfilePage() {
                 <TextArea id="edit-bio" rows={3} value={form.bio} onChange={field('bio')} placeholder="Tell your story..." />
               </div>
               <div>
-                <Label htmlFor="edit-location">Location</Label>
+                <Label htmlFor="edit-city">City</Label>
                 <div className="relative">
                   <MapPin size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#6B6B6B]" />
-                  <Input id="edit-location" value={form.location} onChange={field('location')} placeholder="Mumbai, India" className="pl-9" />
+                  <Input id="edit-city" value={form.city} onChange={field('city')} placeholder="Mumbai" className="pl-9" />
                 </div>
+              </div>
+              <div>
+                <Label htmlFor="edit-country">Country</Label>
+                <select id="edit-country" className="input-field text-sm" value={form.country} onChange={field('country')}>
+                  <option value="">Select country…</option>
+                  {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
               </div>
               <div>
                 <Label htmlFor="edit-email">Email</Label>
@@ -266,6 +283,31 @@ export default function EditProfilePage() {
                   {YEARS.map(y => <option key={y}>{y}</option>)}
                 </select>
               </div>
+            </div>
+          </SectionCard>
+
+          {/* ── Role ── */}
+          <SectionCard title="I am a">
+            <div className="grid grid-cols-2 gap-3">
+              {ROLES.map(r => (
+                <button
+                  key={r}
+                  type="button"
+                  onClick={() => setForm(p => ({ ...p, role: r }))}
+                  className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all duration-150 cursor-pointer text-left ${form.role === r
+                      ? 'border-[#3D5CFF] bg-[#3D5CFF]/05'
+                      : 'border-[#EAEAEA] bg-[#FAFAFA] hover:border-[#3D5CFF]/40'
+                    }`}
+                >
+                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${form.role === r ? 'bg-[#3D5CFF] text-white' : 'bg-[#EAEAEA] text-[#6B6B6B]'
+                    }`}>
+                    {r === 'Company & Freelancer' ? <Briefcase size={17} /> : <GraduationCap size={17} />}
+                  </div>
+                  <span className={`text-xs font-semibold ${form.role === r ? 'text-[#3D5CFF]' : 'text-[#0A0A0A]'
+                    }`}>{r}</span>
+                  {form.role === r && <Check size={13} className="text-[#3D5CFF] ml-auto shrink-0" />}
+                </button>
+              ))}
             </div>
           </SectionCard>
 
@@ -320,11 +362,10 @@ export default function EditProfilePage() {
                   key={cat}
                   type="button"
                   onClick={() => form.preferredCategories.includes(cat) ? removeTag('preferredCategories')(cat) : addTag('preferredCategories')(cat)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-150 cursor-pointer border ${
-                    form.preferredCategories.includes(cat)
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-150 cursor-pointer border ${form.preferredCategories.includes(cat)
                       ? 'bg-[#3D5CFF] text-white border-[#3D5CFF]'
                       : 'bg-[#FAFAFA] text-[#6B6B6B] border-[#EAEAEA] hover:border-[#3D5CFF] hover:text-[#3D5CFF]'
-                  }`}
+                    }`}
                 >
                   {cat}
                 </button>
@@ -379,25 +420,6 @@ export default function EditProfilePage() {
             </div>
           </SectionCard>
 
-          {/* ── Theme ── */}
-          <SectionCard title="Theme Preference">
-            <div className="flex gap-3">
-              {(['light', 'dark', 'system'] as const).map(t => (
-                <button
-                  key={t}
-                  type="button"
-                  onClick={() => setForm(p => ({ ...p, themePreference: t }))}
-                  className={`flex-1 py-2.5 rounded-xl border text-xs font-semibold transition-all duration-150 cursor-pointer capitalize ${
-                    form.themePreference === t
-                      ? 'bg-[#0A0A0A] text-white border-[#0A0A0A]'
-                      : 'bg-[#FAFAFA] text-[#6B6B6B] border-[#EAEAEA] hover:border-[#0A0A0A]'
-                  }`}
-                >
-                  {t === 'light' ? '☀️' : t === 'dark' ? '🌙' : '💻'} {t}
-                </button>
-              ))}
-            </div>
-          </SectionCard>
         </form>
 
         {/* ── Fixed bottom action bar ── */}

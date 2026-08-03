@@ -13,9 +13,16 @@ import EditProfilePage from './pages/app/EditProfilePage';
 import SettingsPage from './pages/app/SettingsPage';
 import CoursePlayerPage from "./pages/app/CoursePlayerPage";
 
+/** Only authenticated users may pass; others go to /login */
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useStore((s) => s.isAuthenticated);
   return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />;
+}
+
+/** Authenticated users who haven't completed their profile go to /profile-setup */
+function ProfileGuard({ children }: { children: React.ReactNode }) {
+  const isProfileComplete = useStore((s) => s.isProfileComplete);
+  return isProfileComplete ? <>{children}</> : <Navigate to="/profile-setup" replace />;
 }
 
 export default function App() {
@@ -25,12 +32,23 @@ export default function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/profile-setup" element={<ProfileSetup />} />
+        {/* Profile setup: requires auth but NOT profile completion (that's the point) */}
+        <Route
+          path="/profile-setup"
+          element={
+            <ProtectedRoute>
+              <ProfileSetup />
+            </ProtectedRoute>
+          }
+        />
+        {/* App: requires auth AND profile completion */}
         <Route
           path="/app"
           element={
             <ProtectedRoute>
-              <Dashboard />
+              <ProfileGuard>
+                <Dashboard />
+              </ProfileGuard>
             </ProtectedRoute>
           }
         >
